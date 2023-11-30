@@ -1,11 +1,21 @@
 package Game
-
+import Player
 import kotlin.random.Random
 
-class Monster(val name: String) {
-    var healthPoints = Random.nextInt(20, 101)
-    var attackDamage = Random.nextInt(1, 51)
+// Monster class represents the adversaries in the game
+class Monster {
+    val name: String = generateRandomMonsterName()
+    var healthPoints: Int = Random.nextInt(20, 101)
+    var attackDamage: Int = Random.nextInt(1, 51)
 
+    // Function to generate a random monster name
+    private fun generateRandomMonsterName(): String {
+        val adjectives = listOf("Fierce", "Sly", "Thunderous", "Giant", "Dreadful")
+        val monsters = listOf("Dragon", "Basilisk", "Specter", "Wyrm", "Chimera")
+        return "${adjectives.random()} ${monsters.random()}"
+    }
+
+    // Function to simulate an encounter with the monster
     fun encounter(player: Player) {
         println("Oh no! You've encountered a $name with ${healthPoints}HP!")
 

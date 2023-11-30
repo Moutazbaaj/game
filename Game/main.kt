@@ -1,75 +1,56 @@
-package Game
+import Game.Location
+import Game.processLocationChoice
+
 
 fun main() {
-    // Storyline
-    println("Welcome to 'Realm of Adventure'!")
-    println("In a distant land, a brave adventurer embarks on a quest filled with monsters, challenges, and hidden treasures.")
-    println("Your goal is to navigate through mystical locations, defeat monsters, and discover powerful items.")
-
-    // Player name input
+// Storyline
+    println("Welcome to ‘Realm of Adventure’!")
+    println(" In a distant land, a brave adventurer embarks on a quest filled with monsters, challenges, and hidden treasures.")
+    println( "Your goal is to navigate through mystical locations, defeat monsters, and discover powerful items.")
+// Player name input
     print("Enter your adventurer's name: ")
     val playerName = readLine() ?: "Adventurer"
 
     val player = Player(playerName)
     println("\nGreetings, $playerName! Your journey begins now.")
 
-    // Create a random monster
-    val initialMonster = Monster("Random Beast")
-    println("\nOh no! You've encountered a ${initialMonster.name} with ${initialMonster.healthPoints}HP!")
+// Main game loop
+    var level = 1
+    var previousLocation: Location? = null
+    while (player.healthPoints > 0) {
+        // Update player's attack power after each level
+        player.attackPower += 10
+        player.displayInfo()
 
-    // Options for the player
-    println("\nWhat would you like to do?")
-    println("1. Start playing")
-    println("2. Cancel and exit")
+        // Offer choices for the player to explore different places
+        println("\nChoose a location for Level $level:")
+        println("1. Enchanted Grove")
+        println("2. Whispering Waterfall")
+        println("3. Mystic Cavern")
 
-    when (readLine()?.toIntOrNull()) {
-        1 -> {
-            println("\nGreat! Let the adventure begin.")
+        var locationChoice: Int?
+        do {
+            locationChoice = readLine()?.toIntOrNull()
+            processLocationChoice(locationChoice, player, previousLocation)
 
-            println("\nChoose a location:")
-            println("1. Mystical Jungle")
-            println("2. Sandland")
-            println("3. Holy Mountain")
+        } while (locationChoice !in listOf(1, 2, 3))
 
-            when (readLine()?.toIntOrNull()) {
-                1 -> {
-                    // Mystical Jungle
-                    val mysticalJungle =
-                        Location("Mystical Jungle", "You enter the Mystical Jungle. There are paths leading to:")
-                    println("1. Enchanted Grove")
-                    println("2. Whispering Waterfall")
+        // Save the current location for potential return
+        previousLocation = when (locationChoice) {
+            1 -> Location("Enchanted Grove", "You enter the Enchanted Grove. The air is filled with magic.")
+            2 -> Location(
+                "Whispering Waterfall",
+                "You approach the majestic Whispering Waterfall. Nature's symphony surrounds you."
+            )
 
-                    val mysticalJungleChoice = readLine()?.toIntOrNull()
-                    mysticalJungle.visit(player)
-                }
-
-                2 -> {
-                    // Sandland
-                    val sandland = Location("Sandland", "You traverse the vast Sandland. There are paths leading to:")
-                    println("1. Dune Desert")
-                    println("2. Mirage Oasis")
-
-                    val sandlandChoice = readLine()?.toIntOrNull()
-                    sandland.visit(player)
-                }
-
-                3 -> {
-                    // Holy Mountain
-                    val holyMountain =
-                        Location("Holy Mountain", "You ascend the sacred Holy Mountain. There are paths leading to:")
-                    println("1. Celestial Summit")
-                    println("2. Divine Cavern")
-
-                    val holyMountainChoice = readLine()?.toIntOrNull()
-                    holyMountain.visit(player)
-                }
-
-                else -> {
-                    println("Invalid choice. The adventure ends here.")
-                }
-            }
+            3 -> Location("Mystic Cavern", "You descend into the mystical Mystic Cavern. Shadows dance on the walls.")
+            else -> null // This case is unreachable due to the check above
         }
+
+        // Move to the next level
+        level++
     }
+
+// Game over
+    println("\nGame over, $playerName! Thanks for playing.")
 }
-
-
