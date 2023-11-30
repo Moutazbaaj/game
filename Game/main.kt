@@ -52,5 +52,5 @@ fun main() {
     }
 
 // Game over
-    println("\nGame over, $playerName! Thanks for playing.")
+    println("\nGame over, $playerName! Thanks for playing...")
 }
